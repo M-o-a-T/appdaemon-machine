@@ -4,6 +4,7 @@ Repository: https://github.com/PeWu/appdaemon-machine
 """
 
 from collections import defaultdict, namedtuple
+from collections.abc import Iterable
 from enum import Enum
 from urllib.parse import quote
 
@@ -142,12 +143,12 @@ class Machine:
     """
 
     assert from_state != ANY, 'Use add_transitions()'
-    assert not isinstance(from_state, list), 'Use add_transitions()'
+    assert not isinstance(from_state, Iterable), 'Use add_transitions()'
     assert isinstance(from_state, self.states), (
         'Invalid state: {}'.format(from_state))
     assert isinstance(to_state, self.states), (
         'Invalid state: {}'.format(to_state))
-    assert not isinstance(trigger, list), 'Use add_transitions()'
+    assert not isinstance(trigger, Iterable), 'Use add_transitions()'
 
     # Add transition based on a state trigger.
     if isinstance(trigger, IsState) or isinstance(trigger, IsNotState):
@@ -196,13 +197,13 @@ class Machine:
       return
 
     # Add transitions from a list of states.
-    if isinstance(from_states, list):
+    if isinstance(from_states, Iterable):
       for state in from_states:
         self.add_transitions(state, triggers, to_state, on_transition)
       return
 
     # Add transitions for a list of triggers.
-    if isinstance(triggers, list):
+    if isinstance(triggers, Iterable):
       for trigger in triggers:
         self.add_transitions(from_states, trigger, to_state, on_transition)
       return
